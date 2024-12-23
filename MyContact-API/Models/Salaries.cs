@@ -8,7 +8,7 @@
         public string? TelephoneFixe { get; set; }
         public string? TelephonePortable { get; set; }
         public string? Email { get; set; }
-       
+
         // Foreign Key
         public int ServiceId { get; set; }
         public required Services Service { get; set; }
