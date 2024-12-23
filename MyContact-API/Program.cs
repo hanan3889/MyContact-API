@@ -1,25 +1,44 @@
+using MyContact_API;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Ajout du DbContext
+builder.Services.AddDbContext<MyContactDbContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+    new MySqlServerVersion(new Version(8, 0, 21))));
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Ajout des contrôleurs
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.WriteIndented = true; // Active l'indentation
+});
+
+// Permet la génération automatique de documentation des routes
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("V0.1", new OpenApiInfo { Title = "MyContact API", Description = "Donne accès à la base de données ", Version = "v0.1" });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/V0.1/swagger.json", "MyContact API V0.1");
+    });
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
+app.UseRouting();
 app.MapControllers();
+
+// Possible d'ajouter CORS, regarder documentation ASP.NET CORE
+// builder.Services.AddCors(options => {});
+
+app.MapGet("/", () => "Salem alikoum!");
 
 app.Run();
