@@ -8,42 +8,37 @@
 -- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
 SET time_zone = "+00:00";
 
+-- Définition de la base de données
+CREATE DATABASE IF NOT EXISTS `mycontactdb`;
+USE `mycontactdb`;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `mycontactdb`
---
-
--- --------------------------------------------------------
-
-
-
-CREATE TABLE Sites (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    Ville TEXT NOT NULL
+-- Création de la table Sites
+CREATE TABLE `Sites` (
+    `Id` INT PRIMARY KEY AUTO_INCREMENT,
+    `Ville` TEXT NOT NULL
 );
 
-CREATE TABLE Services (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    Nom TEXT NOT NULL
+-- Création de la table Services
+CREATE TABLE `Services` (
+    `Id` INT PRIMARY KEY AUTO_INCREMENT,
+    `Nom` TEXT NOT NULL
 );
 
-CREATE TABLE Salaries (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    Nom TEXT NOT NULL,
-    Prenom TEXT NOT NULL,
-    TelephoneFixe TEXT,
-    TelephonePortable TEXT,
-    Email TEXT,
-    ServiceId INT,
-    SiteId INT,
-    FOREIGN KEY (ServiceId) REFERENCES Services(Id),
-    FOREIGN KEY (SiteId) REFERENCES Sites(Id)
+-- Création de la table Salaries
+CREATE TABLE `Salaries` (
+    `Id` INT PRIMARY KEY AUTO_INCREMENT,
+    `Nom` TEXT NOT NULL,
+    `Prenom` TEXT NOT NULL,
+    `TelephoneFixe` TEXT,
+    `TelephonePortable` TEXT,
+    `Email` TEXT,
+    `ServiceId` INT,
+    `SiteId` INT,
+    FOREIGN KEY (`ServiceId`) REFERENCES `Services`(`Id`),
+    FOREIGN KEY (`SiteId`) REFERENCES `Sites`(`Id`)
 );
+
+-- Validation des modifications
+COMMIT;
