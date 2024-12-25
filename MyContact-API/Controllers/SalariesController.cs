@@ -62,7 +62,7 @@ namespace MyContact_API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500); // 500 = internal server error
+                return StatusCode(500); 
             }
         }
 
@@ -98,7 +98,7 @@ namespace MyContact_API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500); // 500 = internal server error
+                return StatusCode(500); 
             }
         }
 
@@ -121,7 +121,7 @@ namespace MyContact_API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500); // 500 = internal server error
+                return StatusCode(500); 
             }
         }
     }
