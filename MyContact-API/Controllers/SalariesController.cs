@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyContact_API.Models;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyContact_API.Controllers
 {
@@ -19,9 +20,9 @@ namespace MyContact_API.Controllers
         // GET: api/Salaries/get/all
         [HttpGet]
         [Route("get/all")]
-        public ActionResult GetAll()
+        public async Task<ActionResult<IEnumerable<Salaries>>> GetAll()
         {
-            var data = _context.Salaries.ToList();
+            var data = await _context.Salaries.ToListAsync();
             if (data.Any())
             {
                 return Ok(data);
@@ -33,9 +34,9 @@ namespace MyContact_API.Controllers
         // GET: api/Salaries/get/{id}
         [HttpGet]
         [Route("get/{id}")]
-        public ActionResult GetById(int id)
+        public async Task<ActionResult<Salaries>> GetById(int id)
         {
-            var salary = _context.Salaries.Find(id);
+            var salary = await _context.Salaries.FindAsync(id);
             if (salary == null)
             {
                 return NotFound();
@@ -47,36 +48,41 @@ namespace MyContact_API.Controllers
         // POST: api/Salaries/create
         [HttpPost]
         [Route("create")]
-        public IActionResult Create([FromBody] Salaries salary)
+        public async Task<ActionResult<Salaries>> Create([FromBody] Salaries data)
         {
-            if (salary == null)
+            if (data == null)
             {
                 return BadRequest("Salary data is null.");
             }
 
+            if (data.ServiceId == 0 || data.SiteId == 0)
+            {
+                return BadRequest("ServiceId and SiteId must be provided.");
+            }
+
             try
             {
-                _context.Salaries.Add(salary);
-                _context.SaveChanges();
-                return CreatedAtAction(nameof(GetById), new { id = salary.Id }, salary);
+                _context.Salaries.Add(data);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetById), new { id = data.Id }, data);
             }
             catch (Exception ex)
             {
-                return StatusCode(500); 
+                return StatusCode(500, ex.Message);
             }
         }
 
         // PUT: api/Salaries/update/{id}
         [HttpPut]
         [Route("update/{id}")]
-        public IActionResult Update(int id, [FromBody] Salaries salary)
+        public async Task<IActionResult> Update(int id, [FromBody] Salaries salary)
         {
             if (salary == null || salary.Id != id)
             {
                 return BadRequest();
             }
 
-            var existingSalary = _context.Salaries.Find(id);
+            var existingSalary = await _context.Salaries.FindAsync(id);
             if (existingSalary == null)
             {
                 return NotFound();
@@ -93,21 +99,21 @@ namespace MyContact_API.Controllers
             try
             {
                 _context.Salaries.Update(existingSalary);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500); 
+                return StatusCode(500, ex.Message);
             }
         }
 
         // DELETE: api/Salaries/delete/{id}
         [HttpDelete]
         [Route("delete/{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var salary = _context.Salaries.Find(id);
+            var salary = await _context.Salaries.FindAsync(id);
             if (salary == null)
             {
                 return NotFound();
@@ -116,12 +122,12 @@ namespace MyContact_API.Controllers
             try
             {
                 _context.Salaries.Remove(salary);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500); 
+                return StatusCode(500, ex.Message);
             }
         }
     }

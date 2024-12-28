@@ -11,9 +11,8 @@
 
         // Foreign Key
         public int ServiceId { get; set; }
-        public required Services Service { get; set; }
-
+        
         public int SiteId { get; set; }
-        public required Sites Site { get; set; }
+       
     }
 }
