@@ -1,0 +1,134 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MyContact_API.Models;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace MyContact_API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class SalariesController : ControllerBase
+    {
+        private readonly MyContactDbContext _context;
+
+        public SalariesController(MyContactDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/Salaries/get/all
+        [HttpGet]
+        [Route("get/all")]
+        public async Task<ActionResult<IEnumerable<Salaries>>> GetAll()
+        {
+            var data = await _context.Salaries.ToListAsync();
+            if (data.Any())
+            {
+                return Ok(data);
+            }
+
+            return NotFound();
+        }
+
+        // GET: api/Salaries/get/{id}
+        [HttpGet]
+        [Route("get/{id}")]
+        public async Task<ActionResult<Salaries>> GetById(int id)
+        {
+            var salary = await _context.Salaries.FindAsync(id);
+            if (salary == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(salary);
+        }
+
+        // POST: api/Salaries/create
+        [HttpPost]
+        [Route("create")]
+        public async Task<ActionResult<Salaries>> Create([FromBody] Salaries data)
+        {
+            if (data == null)
+            {
+                return BadRequest("Salary data is null.");
+            }
+
+            if (data.ServiceId == 0 || data.SiteId == 0)
+            {
+                return BadRequest("ServiceId and SiteId must be provided.");
+            }
+
+            try
+            {
+                _context.Salaries.Add(data);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetById), new { id = data.Id }, data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // PUT: api/Salaries/update/{id}
+        [HttpPut]
+        [Route("update/{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] Salaries salary)
+        {
+            if (salary == null || salary.Id != id)
+            {
+                return BadRequest();
+            }
+
+            var existingSalary = await _context.Salaries.FindAsync(id);
+            if (existingSalary == null)
+            {
+                return NotFound();
+            }
+
+            existingSalary.Nom = salary.Nom;
+            existingSalary.Prenom = salary.Prenom;
+            existingSalary.TelephoneFixe = salary.TelephoneFixe;
+            existingSalary.TelephonePortable = salary.TelephonePortable;
+            existingSalary.Email = salary.Email;
+            existingSalary.ServiceId = salary.ServiceId;
+            existingSalary.SiteId = salary.SiteId;
+
+            try
+            {
+                _context.Salaries.Update(existingSalary);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // DELETE: api/Salaries/delete/{id}
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var salary = await _context.Salaries.FindAsync(id);
+            if (salary == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Salaries.Remove(salary);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+    }
+}
