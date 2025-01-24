@@ -1,83 +1,40 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MyContact_API.Models;
 
 namespace MyContact_API.Controllers
 {
-    public class SitesController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class SitesController : ControllerBase
     {
-        // GET: SitesController
-        public ActionResult Index()
+        private readonly MyContactDbContext _context;
+
+        public SitesController(MyContactDbContext context)
         {
-            return View();
+            _context = context;
         }
 
-        // GET: SitesController/Details/5
-        public ActionResult Details(int id)
+        // GET: api/Sites/get/name/{ville}
+        [HttpGet]
+        [Route("get/name/{ville}")]
+        public async Task<ActionResult<IEnumerable<Salaries>>> GetSalariesByCity(string ville)
         {
-            return View();
-        }
+            var salaries = await _context.Salaries
+                .Include(s => s.Service)
+                .Include(s => s.Site)
+                .Where(s => s.Site.Ville.Contains(ville))
+                .ToListAsync();
 
-        // GET: SitesController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: SitesController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            if (!salaries.Any())
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+
+            return Ok(salaries);
         }
 
-        // GET: SitesController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: SitesController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: SitesController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: SitesController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+       
     }
 }
