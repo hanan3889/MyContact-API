@@ -22,10 +22,11 @@ namespace MyContact_API.Controllers
         public async Task<ActionResult<IEnumerable<Salaries>>> GetSalariesByCity(string ville)
         {
             var salaries = await _context.Salaries
-                .Include(s => s.Service)
-                .Include(s => s.Site)
-                .Where(s => s.Site.Ville.Contains(ville))
-                .ToListAsync();
+                 .Include(s => s.Service)  // Charger la relation Service
+                 .Include(s => s.Site)  // Charger la relation Site
+                 .Where(s => s.Site.Ville == ville)
+                 .ToListAsync();
+                
 
             if (!salaries.Any())
             {
