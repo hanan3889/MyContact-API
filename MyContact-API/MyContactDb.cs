@@ -7,8 +7,9 @@ public class MyContactDbContext : DbContext
     public DbSet<Sites> Sites { get; set; }
     public DbSet<Services> Services { get; set; }
     public DbSet<Salaries> Salaries { get; set; }
+    public DbSet<Users> Users { get; set; }
 
-    public MyContactDbContext(DbContextOptions<MyContactDbContext> options) : base(options){}
+    public MyContactDbContext(DbContextOptions<MyContactDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

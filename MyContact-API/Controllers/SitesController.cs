@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyContact_API.Models;
 
@@ -22,11 +21,11 @@ namespace MyContact_API.Controllers
         public async Task<ActionResult<IEnumerable<Salaries>>> GetSalariesByCity(string ville)
         {
             var salaries = await _context.Salaries
-                 .Include(s => s.Service)  
-                 .Include(s => s.Site)  
+                 .Include(s => s.Service)
+                 .Include(s => s.Site)
                  .Where(s => s.Site.Ville == ville)
                  .ToListAsync();
-                
+
 
             if (!salaries.Any())
             {
@@ -36,6 +35,6 @@ namespace MyContact_API.Controllers
             return Ok(salaries);
         }
 
-       
+
     }
 }
