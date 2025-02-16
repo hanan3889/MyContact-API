@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyContact_API.Models;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyContact_API.Controllers
 {
