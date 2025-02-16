@@ -16,36 +16,64 @@ namespace MyContact_API.Controllers
         }
 
         // GET: api/Salaries/get/all
+        //[HttpGet]
+        //[Route("get/all")]
+        //public async Task<ActionResult<IEnumerable<Salaries>>> GetAll()
+        //{
+        //    var data = await _context.Salaries
+        //        .Include(s => s.Service)
+        //        .Include(s => s.Site)
+        //        .ToListAsync();
+
+        //    foreach (var salary in data)
+        //    {
+        //        if (salary.SiteId == 1)
+        //        {
+        //            salary.ServiceId = 1; // Siège administratif
+        //            salary.Service = new Services { Id = 1, Nom = "Siège administratif" };
+        //        }
+        //        else
+        //        {
+        //            salary.ServiceId = 2; // Production
+        //            salary.Service = new Services { Id = 2, Nom = "Production" };
+        //        }
+        //    }
+
+        //    if (data.Any())
+        //    {
+        //        return Ok(data);
+        //    }
+
+        //    return NotFound();
+        //}
         [HttpGet]
         [Route("get/all")]
-        public async Task<ActionResult<IEnumerable<Salaries>>> GetAll()
+        public async Task<ActionResult<IEnumerable<SalariesDto>>> GetAll()
         {
-            var data = await _context.Salaries
+            var salaries = await _context.Salaries
                 .Include(s => s.Service)
                 .Include(s => s.Site)
+                .Select(salary => new SalariesDto
+                {
+                    Id = salary.Id,
+                    Nom = salary.Nom,
+                    Prenom = salary.Prenom,
+                    TelephoneFixe = salary.TelephoneFixe,
+                    TelephonePortable = salary.TelephonePortable,
+                    Email = salary.Email,
+                    ServiceNom = salary.Service != null ? salary.Service.Nom : "Non spécifié",
+                    SiteVille = salary.Site != null ? salary.Site.Ville : "Non spécifié"
+                })
                 .ToListAsync();
 
-            foreach (var salary in data)
+            if (salaries.Any())
             {
-                if (salary.SiteId == 1)
-                {
-                    salary.ServiceId = 1; // Siège administratif
-                    salary.Service = new Services { Id = 1, Nom = "Siège administratif" };
-                }
-                else
-                {
-                    salary.ServiceId = 2; // Production
-                    salary.Service = new Services { Id = 2, Nom = "Production" };
-                }
+                return Ok(salaries);
             }
 
-            if (data.Any())
-            {
-                return Ok(data);
-            }
-
-            return NotFound();
+            return NotFound("Aucun salarié trouvé.");
         }
+
 
         // GET: api/Salaries/get/{id}
         [HttpGet]
