@@ -66,12 +66,12 @@ namespace MyContact_API.Controllers
                 })
                 .ToListAsync();
 
-            if (!salaries.Any())
+            if (salaries.Any())
             {
-                return NotFound("Aucun salarié trouvé.");
+                return Ok(salaries);
             }
 
-            return Ok(salaries);
+            return NotFound("Aucun salarié trouvé.");
         }
 
 
