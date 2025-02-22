@@ -1,83 +1,41 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MyContact_API.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 
 namespace MyContact_API.Controllers
 {
-    public class ServicesController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ServicesController : ControllerBase
     {
-        // GET: ServicesController
-        public ActionResult Index()
+        private readonly MyContactDbContext _context;
+
+        public ServicesController(MyContactDbContext context)
         {
-            return View();
+            _context = context;
         }
 
-        // GET: ServicesController/Details/5
-        public ActionResult Details(int id)
+        // GET: api/Services/get/name/{serviceName}
+        [HttpGet]
+        [Route("get/name/{serviceName}")]
+        public async Task<ActionResult<IEnumerable<Salaries>>> GetSalariesByService(string serviceName)
         {
-            return View();
-        }
+            var salaries = await _context.Salaries
+                 .Include(s => s.Service)  
+                 .Include(s => s.Site)  
+                 .Where(s => s.Service.Nom == serviceName)
+                 .ToListAsync();
 
-        // GET: ServicesController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ServicesController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            if (!salaries.Any())
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: ServicesController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ServicesController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ServicesController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ServicesController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Ok(salaries);
         }
     }
 }
