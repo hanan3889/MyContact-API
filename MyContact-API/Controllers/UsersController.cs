@@ -71,5 +71,19 @@ namespace MyContact_API.Controllers
         {
             return await _context.Users.ToListAsync();
         }
+
+        [HttpGet("{email}")]
+        public async Task<ActionResult<Users>> GetUserByEmail(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
     }
 }
