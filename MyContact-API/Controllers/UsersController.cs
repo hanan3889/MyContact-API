@@ -56,7 +56,6 @@ namespace MyContact_API.Controllers
                 return Unauthorized("Invalid email or password.");
             }
 
-            // Vérifier le mot de passe
             if (!BCrypt.Net.BCrypt.Verify(user.Password, storedUser.Password))
             {
                 return Unauthorized("Invalid email or password.");
