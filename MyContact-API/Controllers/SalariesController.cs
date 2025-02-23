@@ -15,37 +15,6 @@ namespace MyContact_API.Controllers
             _context = context;
         }
 
-        // GET: api/Salaries/get/all
-        //[HttpGet]
-        //[Route("get/all")]
-        //public async Task<ActionResult<IEnumerable<Salaries>>> GetAll()
-        //{
-        //    var data = await _context.Salaries
-        //        .Include(s => s.Service)
-        //        .Include(s => s.Site)
-        //        .ToListAsync();
-
-        //    foreach (var salary in data)
-        //    {
-        //        if (salary.SiteId == 1)
-        //        {
-        //            salary.ServiceId = 1; // Siège administratif
-        //            salary.Service = new Services { Id = 1, Nom = "Siège administratif" };
-        //        }
-        //        else
-        //        {
-        //            salary.ServiceId = 2; // Production
-        //            salary.Service = new Services { Id = 2, Nom = "Production" };
-        //        }
-        //    }
-
-        //    if (data.Any())
-        //    {
-        //        return Ok(data);
-        //    }
-
-        //    return NotFound();
-        //}
         [HttpGet]
         [Route("get/all")]
         public async Task<ActionResult<IEnumerable<SalariesDto>>> GetAll()
