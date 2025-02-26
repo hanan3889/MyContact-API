@@ -26,6 +26,8 @@ MyContact-API est une application backend qui permet de gérer les informations 
 - .NET 8.0 SDK
 - MySQL Server
 - Un outil pour tester les API REST (Postman, Swagger UI, etc.)
+- Serveur web [XAMPP](https://www.apachefriends.org/index.html) ou [WampServer](https://www.wampserver.com/)
+
 
 ## Installation
 
