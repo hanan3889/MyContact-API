@@ -41,13 +41,17 @@ namespace MyContact_API.Controllers
 
         //POST: api/Sites (Créer un nouveau site)
         [HttpPost]
-        public async Task<ActionResult<Sites>> CreateSite(Sites site)
+        public async Task<ActionResult<Sites>> CreateSite([FromBody] Sites site)
         {
+            if (site == null)
+                return BadRequest("Données invalides.");
+
             _context.Sites.Add(site);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSite), new { id = site.Id }, site);
         }
+
 
         //PUT: api/Sites/{id} (Mettre à jour un site)
         [HttpPut("{id}")]
