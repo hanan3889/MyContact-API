@@ -64,55 +64,10 @@ MyContact-API est une application backend qui permet de gérer les informations 
 ## Structure de la Base de Données
 
 - **Sites**: Sites géographiques de l'entreprise
-- **Services**: Départements ou services de l'entreprise
+- **Services**: Services de l'entreprise
 - **Salaries**: Informations des employés
 - **Users**: Utilisateurs du système
 
-## Points d'Accès (Endpoints) API
-
-### Salariés
-
-- `GET /api/Salaries/get/all` - Récupérer tous les salariés
-- `GET /api/Salaries/get/{id}` - Récupérer un salarié par ID
-- `GET /api/Salaries/get/name/{nom}` - Rechercher des salariés par nom
-- `POST /api/Salaries/create` - Créer un nouveau salarié
-- `PUT /api/Salaries/update/{id}` - Mettre à jour un salarié
-- `DELETE /api/Salaries/delete/{id}` - Supprimer un salarié
-
-### Services
-
-- `GET /api/Services/get/name/{serviceName}` - Récupérer les salariés par service
-
-### Sites
-
-- `GET /api/Sites/get/name/{ville}` - Récupérer les salariés par ville
-
-### Utilisateurs
-
-- `POST /api/Users/register` - Inscrire un nouvel utilisateur
-- `POST /api/Users/login` - Connecter un utilisateur
-- `GET /api/Users` - Récupérer tous les utilisateurs
-- `GET /api/Users/{email}` - Récupérer un utilisateur par email
-
-## Exemples d'Utilisation
-
-### Récupérer tous les salariés
-
-```bash
-curl -X GET "http://localhost:5110/api/Salaries/get/all" -H "accept: application/json"
-```
-
-### Créer un nouveau salarié
-
-```bash
-curl -X POST "http://localhost:5110/api/Salaries/create" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"nom\":\"Dupont\",\"prenom\":\"Jean\",\"telephoneFixe\":\"01-23-45-67-89\",\"telephonePortable\":\"06-12-34-56-78\",\"email\":\"jean.dupont@blocalimentation.fr\",\"serviceId\":1,\"siteId\":1}"
-```
-
-### Connexion utilisateur
-
-```bash
-curl -X POST "http://localhost:5110/api/Users/login" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"email\":\"admin@example.com\",\"password\":\"MonMotDePasse\"}"
-```
 
 ## Développement
 
