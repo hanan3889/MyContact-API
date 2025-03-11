@@ -20,15 +20,15 @@ namespace MyContact_API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<Users>> Register(Users user)
         {
-            if (user == null || string.IsNullOrWhiteSpace(user.Email) || string.IsNullOrWhiteSpace(user.Password))
+            if (user == null || string.IsNullOrWhiteSpace(user.Email) || string.IsNullOrWhiteSpace(user.Password) || user.SecretCode == 0)
             {
-                return BadRequest("Invalid user data.");
+                return BadRequest("Les données de l utilisateur ne sont pas valides. ");
             }
 
             // Vérifier si l'email existe déjà
             if (await _context.Users.AnyAsync(u => u.Email == user.Email))
             {
-                return BadRequest("Email already exists.");
+                return BadRequest("L email existe deja. ");
             }
 
             // Hacher le mot de passe
@@ -44,26 +44,36 @@ namespace MyContact_API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<Users>> Login(Users user)
         {
-            if (user == null || string.IsNullOrWhiteSpace(user.Email) || string.IsNullOrWhiteSpace(user.Password))
+            if (user == null || string.IsNullOrWhiteSpace(user.Email) || string.IsNullOrWhiteSpace(user.Password) || user.SecretCode == 0)
             {
-                return BadRequest("Invalid user data.");
+                return BadRequest("Les données de l utilisateur ne sont pas valides.");
             }
 
             // Trouver l'utilisateur par email
             var storedUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
             if (storedUser == null)
             {
-                return Unauthorized("Invalid email or password.");
+                
+                return Unauthorized("Email ou mot de passe incorrect.");
             }
 
             // Vérifier le mot de passe
             if (!BCrypt.Net.BCrypt.Verify(user.Password, storedUser.Password))
             {
-                return Unauthorized("Invalid email or password.");
+               
+                return Unauthorized("Email ou mot de passe incorrect.");
+            }
+
+            // Vérifier le code secret
+            if (user.SecretCode != storedUser.SecretCode)
+            {
+                
+                return Unauthorized("Code secret invalide. ");
             }
 
             return Ok(storedUser);
         }
+
 
         // GET: api/Users
         [HttpGet]
