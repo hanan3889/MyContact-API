@@ -25,7 +25,6 @@ MyContact-API est une application backend qui permet de gérer les informations 
 
 - .NET 8.0 SDK
 - MySQL Server
-- Un outil pour tester les API REST (Postman, Swagger UI, etc.)
 - Serveur web [XAMPP](https://www.apachefriends.org/index.html) ou [WampServer](https://www.wampserver.com/)
 
 
@@ -40,6 +39,8 @@ MyContact-API est une application backend qui permet de gérer les informations 
 2. Restaurez les packages NuGet
    ```
    dotnet restore
+   BCrypt.Net-Next
+   Pomelo.EntityFrameworkCore
    ```
 
 3. Configurez la base de données
@@ -54,11 +55,6 @@ MyContact-API est une application backend qui permet de gérer les informations 
 5. Exécutez l'application
    ```
    dotnet run
-   ```
-
-6. Accédez à Swagger UI
-   ```
-   http://localhost:5110/swagger
    ```
 
 ## Structure de la Base de Données
