@@ -30,7 +30,9 @@ namespace MyContact_API.Controllers
                     TelephoneFixe = salary.TelephoneFixe,
                     TelephonePortable = salary.TelephonePortable,
                     Email = salary.Email,
+                    ServiceId = salary.ServiceId, 
                     ServiceNom = salary.Service != null ? salary.Service.Nom : "Non spécifié",
+                    SiteId = salary.SiteId, 
                     SiteVille = salary.Site != null ? salary.Site.Ville : "Non spécifié"
                 })
                 .ToListAsync();
@@ -42,6 +44,7 @@ namespace MyContact_API.Controllers
 
             return NotFound("Aucun salarié trouvé.");
         }
+
 
 
         // GET: api/Salaries/get/{id}
