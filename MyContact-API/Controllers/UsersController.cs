@@ -42,28 +42,28 @@ namespace MyContact_API.Controllers
 
         // POST: api/Users/login
         [HttpPost("login")]
-        public async Task<ActionResult<Users>> Login(Users user)
+        public async Task<ActionResult<Users>> Login([FromBody] UserLoginModel userModel)
         {
-            if (user == null || string.IsNullOrWhiteSpace(user.Email) || string.IsNullOrWhiteSpace(user.Password) || user.SecretCode == 0)
+            if (userModel == null || string.IsNullOrWhiteSpace(userModel.Email) || string.IsNullOrWhiteSpace(userModel.Password) || userModel.SecretCode == 0)
             {
                 return BadRequest("Les données de l'utilisateur ne sont pas valides.");
             }
 
             // Trouver l'utilisateur par email
-            var storedUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+            var storedUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == userModel.Email);
             if (storedUser == null)
             {
                 return Unauthorized("Email ou mot de passe incorrect.");
             }
 
             // Vérifier le mot de passe
-            if (!BCrypt.Net.BCrypt.Verify(user.Password, storedUser.Password))
+            if (!BCrypt.Net.BCrypt.Verify(userModel.Password, storedUser.Password))
             {
                 return Unauthorized("Email ou mot de passe incorrect.");
             }
 
             // Vérifier le code secret
-            if (user.SecretCode != storedUser.SecretCode)
+            if (userModel.SecretCode != storedUser.SecretCode)
             {
                 return Unauthorized("Code secret invalide.");
             }
@@ -83,6 +83,20 @@ namespace MyContact_API.Controllers
         public async Task<ActionResult<Users>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
+        // GET: api/Users/email/{email}
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<Users>> GetUserByEmail(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
@@ -142,5 +156,12 @@ namespace MyContact_API.Controllers
         {
             return _context.Users.Any(e => e.Id == id);
         }
+    }
+
+    public class UserLoginModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public int SecretCode { get; set; }
     }
 }
