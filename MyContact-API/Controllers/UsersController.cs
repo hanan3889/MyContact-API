@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MyContact_API.Models;
 using BCrypt;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyContact_API.Controllers
 {
@@ -10,10 +14,12 @@ namespace MyContact_API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly MyContactDbContext _context;
+        private readonly string _apiKey;
 
-        public UsersController(MyContactDbContext context)
+        public UsersController(MyContactDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _apiKey = configuration["ApiSettings:ApiKey"];
         }
 
         // POST: api/Users/register
