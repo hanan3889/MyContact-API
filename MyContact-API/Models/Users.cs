@@ -19,5 +19,7 @@ namespace MyContact_API.Models
         public string Password { get; set; }
 
         public int Roles { get; set; }
+        [Range(1000, 9999, ErrorMessage = "Le code secret doit être un nombre à 4 chiffres.")]
+        public int SecretCode { get; set; }
     }
 }
