@@ -85,5 +85,6 @@ MyContact-API est une application backend qui permet de gérer les informations 
 
 - Les mots de passe sont hachés avec BCrypt avant d'être stockés en base de données
 - Validation des entrées sur toutes les requêtes
+- Génération d'une API Key
 
 
