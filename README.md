@@ -57,6 +57,15 @@ MyContact-API est une application backend qui permet de gérer les informations 
    dotnet run
    ```
 
+## Procédure d'installation de l'application avec l'exécutable
+- Télécharger le dossier .zip en suivant ce lien  [release]( https://github.com/hanan3889/MyContact-API/releases/tag/releaseAPI) .
+- Décompresser le fichier et exécuter le fichier avec l'extension .exe
+- Double-cliquez sur le fichier d'installation téléchargé pour lancer le programme d'installation.
+- Autoriser l'installation.
+- Suivez les instructions à l'écran pour compléter l'installation. 
+- Une fois l'installation terminée, cliquez sur Terminer pour fermer le programme d'installation.
+- Se rendre sur PhpMyadmin, crée la base de donnée et importer le fichier mycontactdb.sql qui se trouve dans le dossier BDD.
+
 ## Structure de la Base de Données
 
 - **Sites**: Sites géographiques de l'entreprise
